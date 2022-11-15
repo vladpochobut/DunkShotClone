@@ -1,55 +1,51 @@
 using DunkShot.Core.Ball;
-using System.Collections;
-using System.Collections.Generic;
+using DunkShot.Core.Basket;
 using UnityEngine;
 
-public class TapticManager : MonoBehaviour
+namespace DunkShot.Core.Audio
 {
-    [Header(" Settings ")]
-    private bool _haptics;
-
-    private bool _isTapticEnabled;
-    private void Start()
+    public class TapticManager : MonoBehaviour
     {
-        GameManager.OnGameStateChanged += GameStateChangedCallback;
-        StarHandler.onStarCollect += Vibrate;
-        BallTrajectory.onShot += Vibrate;
-    }
+        [Header(" Settings ")]
+        private bool _haptics;
 
-    private void Vibrate()
-    {
-        if (_haptics)
-            Taptic.Light();
-    }
+        private bool _isTapticEnabled;
+        private void Start()
+        {
+            GameManager.OnGameStateChanged += GameStateChangedCallback;
+            StarHandler.onStarCollect += Vibrate;
+            BallTrajectory.onShot += Vibrate;
+            BasketController.onGetIntoBasket += Vibrate;
+        }
 
-    private void GameStateChangedCallback(GameManager.GAME_STATE gameState)
-    {
-        if (gameState == GameManager.GAME_STATE.GameOver)
-            Vibrate();
-    }
+        private void Vibrate()
+        {
+            if (_haptics)
+                Taptic.Light();
+        }
 
-    public void TapticEnabledSwitch()
-    {
-        if (_isTapticEnabled)
-            DisableVibration();
-        else
-            EnableVibration();
-    }
+        private void GameStateChangedCallback(GameManager.GAME_STATE gameState)
+        {
+            if (gameState == GameManager.GAME_STATE.GameOver)
+                Vibrate();
+        }
 
-    private void EnableVibration()
-    {
-        _haptics = true;
-    }
+        public void EnableVibration()
+        {
+            _haptics = true;
+        }
 
-    private void DisableVibration()
-    {
-        _haptics = false;
-    }
+        public void DisableVibration()
+        {
+            _haptics = false;
+        }
 
-    private void OnDestroy()
-    {
-        GameManager.OnGameStateChanged -= GameStateChangedCallback;
-        StarHandler.onStarCollect -= Vibrate;
-        BallTrajectory.onShot -= Vibrate;
+        private void OnDestroy()
+        {
+            GameManager.OnGameStateChanged -= GameStateChangedCallback;
+            StarHandler.onStarCollect -= Vibrate;
+            BallTrajectory.onShot -= Vibrate;
+            BasketController.onGetIntoBasket -= Vibrate;
+        }
     }
 }

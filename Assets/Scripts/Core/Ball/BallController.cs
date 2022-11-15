@@ -1,5 +1,5 @@
-﻿using System;
-using System.Collections;
+﻿using DunkShot.Core.UI;
+using System;
 using UnityEngine;
 
 namespace DunkShot.Core.Ball
@@ -13,19 +13,27 @@ namespace DunkShot.Core.Ball
         private Vector3 _startPosition;
         private Rigidbody2D _currentRigidbody2D;
         private Collider2D _currentCollider2D;
+        private SpriteRenderer _spriteRenderer;
         public Vector3 StartPosition => _startPosition;
         public float Power => _power;
 
         private void OnEnable()
         {
             BallTrajectory.onStartShot += Shot;
+            SkinButton.onNewSkinSelect += ChengeCurrentSkin;
         }
 
         void Start()
         {
+            _spriteRenderer = GetComponent<SpriteRenderer>();
             _currentCollider2D = GetComponent<Collider2D>();
             _currentRigidbody2D = GetComponent<Rigidbody2D>();
             ConfigureStartBallSettings();
+        }
+
+        private void ChengeCurrentSkin(Sprite sprite)
+        {
+            _spriteRenderer.sprite = sprite;
         }
 
         public void SetStartBallPosition(Vector3 position)

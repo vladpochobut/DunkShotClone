@@ -1,5 +1,4 @@
-﻿using DunkShot.Core.Ball;
-using DunkShot.Core.Basket;
+﻿using DunkShot.Core.Basket;
 using UnityEngine;
 
 namespace DunkShot.Core.CameraStuff

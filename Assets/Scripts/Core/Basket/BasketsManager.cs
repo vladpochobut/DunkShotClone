@@ -1,6 +1,3 @@
-using DunkShot.Core.Ball;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace DunkShot.Core.Basket

@@ -1,10 +1,9 @@
 ﻿using DunkShot.Core.Basket;
-using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Events;
 using UnityEngine.UI;
 
-namespace Assets.Scripts.Core.Points
+namespace DunkShot.Core.Points
 {
     public class PointsController : MonoBehaviour
     {
@@ -12,7 +11,7 @@ namespace Assets.Scripts.Core.Points
         private const string StarKey = "Star";
         [Header(" Elements ")]
         [SerializeField]
-        private Text _starsCountText;
+        private List<Text> _starsCountText;
         [SerializeField]
         private Text _pointsCountText;
 
@@ -29,6 +28,13 @@ namespace Assets.Scripts.Core.Points
                 Destroy(gameObject);
             else
                 Instance = this;
+
+            UpdateStarsScore();
+        }
+
+        public void UpdateStarsScore()
+        {
+            _starsCountText.ForEach(x => x.text = GetStarsCount().ToString());
         }
 
         private void AddPoint()
@@ -40,7 +46,13 @@ namespace Assets.Scripts.Core.Points
         private void AddStar()
         {
             PlayerPrefs.SetInt(StarKey, PlayerPrefs.GetInt(StarKey, 0) + 1);
-            _starsCountText.text = GetStarsCount().ToString();
+            _starsCountText.ForEach(x=>x.text = GetStarsCount().ToString());
+        }
+
+        public void UseStars(int price) 
+        {
+            PlayerPrefs.SetInt(StarKey, PlayerPrefs.GetInt(StarKey, 0) - 1);
+            _starsCountText.ForEach(x => x.text = GetStarsCount().ToString());
         }
 
         public int GetStarsCount()

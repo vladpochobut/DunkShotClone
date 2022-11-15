@@ -1,6 +1,5 @@
 ﻿using DunkShot.Core.Ball;
-using System;
-using System.Collections;
+using DunkShot.Core.Basket;
 using UnityEngine;
 
 namespace DunkShot.Core.Audio
@@ -19,13 +18,12 @@ namespace DunkShot.Core.Audio
         [SerializeField]
         private AudioSource _gameOverSound;
 
-        private bool _isSoundsEnabled = true;
-
         private void Start()
         {
             GameManager.OnGameStateChanged += GameStateChangedCallback;
             StarHandler.onStarCollect += StarCollect;
             BallTrajectory.onShot += Shot;
+            BasketController.onGetIntoBasket += BasketHit;
         }
 
         private void Shot()
@@ -38,6 +36,11 @@ namespace DunkShot.Core.Audio
             _starCollectSound.Play();
         }
 
+        private void BasketHit()
+        {
+            _basketHitSound.Play();
+        }
+
         private void GameStateChangedCallback(GameManager.GAME_STATE gameState)
         {
             if (gameState == GameManager.GAME_STATE.GameOver)
@@ -46,15 +49,7 @@ namespace DunkShot.Core.Audio
                 _buttonSound.Play();
         }
 
-        public void SoundEnabledSwitch()
-        {
-            if (_isSoundsEnabled)
-                DisableSounds();
-            else
-                EnableSounds();
-        }
-
-        private void EnableSounds()
+        public void EnableSounds()
         {
             _buttonSound.volume = 1;
             _basketHitSound.volume = 1;
@@ -62,7 +57,7 @@ namespace DunkShot.Core.Audio
             _gameOverSound.volume = 1;
         }
 
-        private void DisableSounds()
+        public void DisableSounds()
         {
             _buttonSound.volume = 0;
             _basketHitSound.volume = 0;
@@ -75,6 +70,7 @@ namespace DunkShot.Core.Audio
             GameManager.OnGameStateChanged -= GameStateChangedCallback;
             StarHandler.onStarCollect -= StarCollect;
             BallTrajectory.onShot -= Shot;
+            BasketController.onGetIntoBasket -= BasketHit;
         }
     }
 }
